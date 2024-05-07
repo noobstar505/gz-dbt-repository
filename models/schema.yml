@@ -6,7 +6,40 @@ sources:
     tables:
       - name: product
         identifier: raw_gz_product
+        description: the purchase price of each product
+        columns:
+          - name: products_id
+            description: primary key of the table
+            tests:
+              - unique
+              - not_null
+
+
+
       - name: sales
         identifier: raw_gz_sales
+        description: sales of greenwees, one row of products id found in orders id
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+        columns:         
+          - name: date_date
+            description: the order date
+          - name: quantity
+            description: numbers of products sold
+          - name: revenue
+            description: the revenue each order generates
+
+
+
       - name: ship
         identifier: raw_gz_ship
+        description: logistics cost per order
+        columns:
+          - name: orders_id
+            description: primary key of the table
+            tests:
+              - unique
+              - not_null
+              
+       

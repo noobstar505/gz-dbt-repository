@@ -14,7 +14,6 @@ renamed as (
         pdt_id AS product_id
         ,revenue
         ,quantity
-
     from source
 
 )
