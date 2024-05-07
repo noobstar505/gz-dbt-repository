@@ -19,6 +19,10 @@ sources:
       - name: sales
         identifier: raw_gz_sales
         description: sales of greenwees, one row of products id found in orders id
+        # freshness: 
+        #   warn_after: {count: 90, period: day}
+        # loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+        
         tests:
           - unique:
               column_name: "(orders_id || '-' || pdt_id)"
