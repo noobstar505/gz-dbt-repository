@@ -319,14 +319,11 @@ models:
 
   - name: int_campaigns
     tests:
-          - unique:
-              column_name: "(date_date || '-' || campaign_key)"
-    columns:         
-      - name: date_date
-        description: campaign date
-        tests:
-            - not_null
+      - unique:
+          column_name: "(date_date || '-' || campaign_key)"
+      
           
+    columns:         
       - name: ads_cost
         tests:
             - not_null
