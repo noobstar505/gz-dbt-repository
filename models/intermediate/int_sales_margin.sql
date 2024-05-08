@@ -1,3 +1,5 @@
+WITH margin_calc AS(
+
 SELECT 
 sales.*
 ,product.purchase_price
@@ -6,3 +8,10 @@ sales.*
 FROM {{ref("stg_raw__sales")}} sales
 JOIN {{ref("stg_raw__product")}} product
 ON sales.product_id = product.products_id
+
+)
+
+SELECT *
+ ,{{margin_percent( 'revenue','purchase_cost')}} AS margin_percent
+FROM margin_calc
+
