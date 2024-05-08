@@ -6,7 +6,202 @@ sources:
     tables:
       - name: product
         identifier: raw_gz_product
+        description: the purchase price of each product
+        columns:
+          - name: products_id
+            description: primary key of the table
+            tests:
+              - unique
+              - not_null
+
+
+
       - name: sales
         identifier: raw_gz_sales
+        description: sales of greenwees, one row of products id found in orders id
+        # freshness: 
+        #   warn_after: {count: 90, period: day}
+        # loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+        
+        tests:
+          - unique:
+              column_name: "(orders_id || '-' || pdt_id)"
+        columns:         
+          - name: date_date
+            description: the order date
+          - name: quantity
+            description: numbers of products sold
+          - name: revenue
+            description: the revenue each order generates
+
+
+
       - name: ship
         identifier: raw_gz_ship
+        description: logistics cost per order
+        columns:
+          - name: orders_id
+            description: primary key of the table
+            tests:
+              - unique
+              - not_null
+
+models:
+  - name: stg_raw__sales
+    tests:
+          - unique:
+              column_name: "(orders_id || '-' || product_id)"
+    description: primary key of the table
+
+    columns:
+      - name: date_date
+        tests:
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+          
+          
+         
+  - name: stg_raw__product
+    columns:
+      - name: products_id
+        description: primary key of the table
+        tests:
+          - not_null
+          - unique
+      - name: purchase_price
+        tests:
+          - not_null
+          
+
+  - name: stg_raw__ship
+    columns:
+      - name: orders_id
+        description: primary key of the table
+        tests:
+          - unique
+          - not_null
+      - name: shipping_fee
+        tests:
+          - not_null
+      - name: logcost
+        tests:
+          - not_null
+      - name: ship_cost
+        tests:
+          - not_null
+          
+
+  - name: int_sales_margin
+    tests:
+       - unique:
+           column_name: "(orders_id || '-' || product_id)"
+    description: primary key of the table
+    columns:
+      - name: date_date
+        tests:
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: purchase_price
+        tests:
+          - not_null
+      - name: purchase_cost
+        tests:
+          - not_null
+      - name: margin
+        tests:
+          - not_null
+
+
+  - name: int_orders_margin
+    columns:
+      - name: orders_id
+        description: primary key of the table
+        tests:
+          - unique
+          - not_null
+      - name: date_date
+        tests:
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: purchase_cost
+        tests:
+          - not_null
+      - name: margin
+        tests:
+          - not_null              
+
+
+  - name: int_orders_operational
+    columns:
+      - name: orders_id
+        description: primary key of the table
+        tests:
+          - unique
+          - not_null
+      - name: operational_margin
+        tests:
+          - not_null
+      - name: date_date
+        tests:
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: quantity
+        tests:
+          - not_null
+      - name: purchase_cost
+        tests:
+          - not_null
+      - name: margin
+        tests:
+          - not_null    
+      - name: shipping_fee
+        tests:
+          - not_null
+      - name: logcost
+        tests:
+          - not_null
+      - name: ship_cost
+        tests:
+          - not_null
+
+  - name: finance_days
+    columns:
+      - name: date_date
+        description: primary key of the table
+        tests:
+          - unique
+          - not_null
+      - name: nb_transactions
+        tests:
+          - not_null
+      - name: revenue
+        tests:
+          - not_null
+      - name: average_basket
+        tests:
+          - not_null
+      - name: margin
+        tests:
+          - not_null
+      - name: operational_margin
+        tests:
+          - not_null
+                          
+    
